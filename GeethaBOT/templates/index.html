@@ -1,0 +1,131 @@
+
+ <html>
+
+ <head>
+ 
+     <title>Chatbot Frontend</title>
+ 
+     <!-- meta related -->
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ 
+     <!-- vendor css & style files -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300|Open+Sans:300|Oxygen|Material+Icons"
+         rel="stylesheet">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+ 
+     <!-- custom css -->
+     <link rel="stylesheet" type="text/css" href="static/main.css">
+     <script src="{{ url_for('static', filename='script.js') }}"></script>
+ 
+ </head>
+ 
+ <body>
+ 
+     <div class="container">
+        
+         <div class="row padded_row">
+ 
+             <!-- right side content -->
+             <div class="col-md-7">
+ 
+                 <div class="chat_window">
+ 
+                     <div class="top_menu">
+                         <div class="title"><b>GeethaBOT</b></div>
+                     </div>
+ 
+                     <!-- dynamically rendered -->
+                     <ul class="messages"></ul>
+                     
+                     <div> 
+                        <div id="department_button" class="button">Department</div>
+                        <div id="location_button" class="button">Location</div>
+                        <div id="placement_button" class="button">Placement</div>
+                        <div id="contact_button" class="button">Contact</div>
+                        <div id="hostel_button" class="button">Hostel</div>
+                        <!-- <div id="admission_button" class="button">Admission</div>
+                        <div id="admission_button" class="button">CET</div>
+                        <div id="admission_button" class="button">Fees</div> -->
+                        <div id="more_button" class="button">More...</div>
+                    </div>
+
+                     <!-- input -->
+                     <div class="bottom_wrapper">
+                         <input id="msg_input" placeholder="Say Hi to begin chat..." />
+                         <div id="send_button" class="app_button_1">Send</div>
+                     </div>
+ 
+                 </div>
+ 
+             </div>
+ 
+             <!-- left side content -->
+             <div class="col-md-5">
+                 <div class="chat_window">
+ 
+                     <div class="top_menu">
+                         <div class="title"><b>Info</b></div>
+                     </div>
+ 
+                     <!-- help container -->
+                     <div class="panel-group" id="accordion">
+ 
+                         <!-- help - 1 -->
+                         <div class="panel panel-default">
+                             <div class="panel-heading">
+                                 <h4 class="panel-title">
+                                     <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
+                                         href="#collapse1">About Us</a>
+                                 </h4>
+                             </div>
+                             <div id="collapse1" class="panel-collapse collapse in">
+                                 <div class="panel-body">
+                                   <h3> GSSS Institute of Engineering & Technology for Women </h3> 
+                                   <p>Located in Mysore, the city of Palaces, renowned as a seat of learning. Steeped in history, the city of the Wodeyars, Mysore continues to be the cultural capital of Karnataka. 
+                                    Experiencing moderate climatic conditions throughout the year, Mysore is located in the southern part of Karnataka with an enchanting natural environment, most suitable for educational pursuits. 
+                                    Managed by the WHO'S WHO of Mysore, GSSS(R) is a non-profit organization which is focused towards value addition in terms of providing best of infrastructure and services for the cause of education.</p>
+
+                                    <h3>Vision</h3>
+                                    
+                                    <p>To become a recognized world class Women Educational Institution, by imparting professional education to the students, creating technical opportunities through academic excellence and technical achievements,
+                                        with ethical values
+                                    </p>
+                                    <h3>Mission</h3>
+                                    <ul>
+                                    <li>To support value based education with state of art infrastructure.</li>
+                                    <li>To empower women with the additional skill for professional future career</li>
+                                    <li>To enrich students with research blends in order to fulfill the International challenges</li>
+                                    <li>To create multidisciplinary center of excellence</li>
+                                    <li>To achieve Accreditation standards towards International education recognition.</li>
+                                    <li>To establish more Post Graduate & Research course.</li>
+                                    <li>To increase Doctorates numbers towards the Research quality of academics.</li>
+                                    </ul>
+                                 </div>
+                             </div>
+                         </div>
+ 
+                     </div>
+ 
+                 </div>
+             </div>
+ 
+         </div>
+ 
+     </div>
+ 
+     <!-- vendor script files -->
+     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+     </script>
+ 
+     <!-- custom scripts -->
+     <script src="static/main.js"></script>
+     <script src="static/function.js"></script>
+     
+ </body>
+ 
+ </html>
+
