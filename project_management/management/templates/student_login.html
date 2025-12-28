@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Student Login
+{% endblock  %}
+
+{% block content %}
+
+    <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="card shadow p-4" style="width: 400px;">
+            <h2 class="text-center mb-4">Student Login</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <a class="btn btn-info mt-2" href="{% url 'forgotPassword' %}">Forgot password</a>
+            </form>
+            {% for message in messages %}
+                <p class="text-danger text-center mt-3">{{ message }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock  %}
+

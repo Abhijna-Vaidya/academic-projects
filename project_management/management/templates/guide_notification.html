@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+{% block title %}
+notify_student
+{% endblock  %}
+
+{% block content %}
+    <div class="container my-5">
+        <h2 class="mb-4">Create Notification</h2>
+        {% if messages %}
+            <ul class="list-group mb-3">
+                {% for message in messages %}
+                <li class="list-group-item list-group-item-warning">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        <form id="notificationForm" enctype="multipart/form-data" method="POST" action="{% url 'notify' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="batch_number" class="form-label">Select Batch:</label>
+                <select name="batch_number" id="batch_number" class="form-select" required>
+                    {% for group in groups %}
+                        <option value="{{ group.batch_number }}">{{ group.batch_number }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="content" class="form-label">Content:</label>
+                <textarea name="content" id="content" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <div class="mb-3" id="attachments-container">
+                <label for="attachments" class="form-label">Attachments:</label>
+                <div class="input-group mb-2">
+                    <input type="file" name="attachments" class="form-control" multiple>
+                    <button type="button" class="btn btn-outline-light" id="add-attachment">
+                        +
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('add-attachment').addEventListener('click', function() {
+            // Create a new div for the new file input
+            const newAttachment = document.createElement('div');
+            newAttachment.classList.add('input-group', 'mb-2');
+
+            // Create the new file input element
+            const newInput = document.createElement('input');
+            newInput.type = 'file';
+            newInput.name = 'attachments';
+            newInput.classList.add('form-control');
+            newInput.multiple = true;
+
+            // Append the new input to the new div
+            newAttachment.appendChild(newInput);
+
+            // Append the new div to the container
+            document.getElementById('attachments-container').appendChild(newAttachment);
+        });
+    </script>
+{% endblock %}
+{% block back %}
+<button 
+    class="btn btn-secondary back-btn" 
+    onclick="location.href='{% url 'guide_dashboard' %}'">
+    Back
+</button>
+{% endblock  %}

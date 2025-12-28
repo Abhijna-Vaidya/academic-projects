@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Project Management System
+{% endblock  %}
+
+
+
+{% block content %}
+ 
+    <h1>COLLABORATIVE STUDENT PROJECT MONITORING AND MANAGEMENT TOOL </h1>
+    <div class="login-container">
+        <a href="{% url 'student_login' %}" class="login-option">
+            <i class="fas fa-user-graduate fa-9x"></i>
+            <span>Student</span>
+        </a>
+        <a href="{% url 'guide_login' %}" class="login-option">
+            <i class="fas fa-chalkboard-teacher fa-9x"></i>
+            <span>Guide</span>
+        </a>
+        <a href="{% url 'admin:index' %}" class="login-option">
+            <i class="fas fa-user-tie fa-9x"></i>
+            <span>Coordinator</span>
+        </a>
+        
+    </div>
+
+{% endblock  %}

@@ -1,0 +1,24 @@
+<!-- upload_evaluation.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="my-4">Upload Evaluation Sheet for Batch {{ group.batch_number }}</h1>
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload Evaluation Sheet</button>
+        </form>
+        {% for message in messages %}
+                <p class="text-danger text-center mt-3">{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block back %}
+<button 
+    class="btn btn-secondary back-btn" 
+    onclick="location.href='{% url 'guide_dashboard' %}'">
+    Back
+</button>
+{% endblock  %}
