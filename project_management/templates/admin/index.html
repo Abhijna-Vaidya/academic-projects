@@ -1,0 +1,186 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/dashboard.css' %}">
+<style>
+    /* Styling the card container */
+    body {
+    background-image: url("{% static 'images/background.png' %}"); /* Corrected path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 100vh; /* Ensure the body height matches the viewport */
+    margin: 0; /* Remove any default margin */
+    background-attachment: fixed; 
+    }
+    
+    /* Styling the heading */
+    .card h1 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Styling for messages */
+    .list-group {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .list-group-item {
+        background-color: #fff3cd;
+        border: 1px solid #ffeeba;
+        border-radius: 5px;
+        padding: 10px;
+        color: #856404;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    /* Styling for form labels */
+    .form-label {
+        font-weight: bold;
+        color: #196bc9;
+        margin-bottom: 5px;
+        display: inline;
+        width: 5px;
+        height: 200px;
+    }
+
+    /* Styling for input fields */
+    .form-control {
+        width: 50%;
+        height:30px;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #010a12;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        transition: border-color 0.3s ease;
+        background-color: rgb(34, 34, 34);
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    /* Styling for the upload button */
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #3b80ca;
+    }
+
+    /* Styling for spacing and margins */
+    .mb-3 {
+        margin-bottom: 20px;
+    }
+
+    .mt-4 {
+        margin-top: 20px;
+    }
+
+    .w-100 {
+        width: 100%;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+</style>
+
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+
+</div>
+
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>{% translate 'Recent actions' %}</h2>
+        <h3>{% translate 'My actions' %}</h3>
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p>{% translate 'None available' %}</p>
+            {% else %}
+            <ul class="actionlist">
+            {% for entry in admin_log %}
+            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                <span class="visually-hidden">{% if entry.is_addition %}{% translate 'Added:' %}{% elif entry.is_change %}{% translate 'Changed:' %}{% elif entry.is_deletion %}{% translate 'Deleted:' %}{% endif %}</span>
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                    {{ entry.object_repr }}
+                {% else %}
+                    <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                {% endif %}
+                <br>
+                {% if entry.content_type %}
+                    <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                {% else %}
+                    <span class="mini quiet">{% translate 'Unknown content' %}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+    </div>
+</div>
+<div class="card shadow mt-2">
+<h1 class="text-center">Reference Student and Faculty CSV Files</h1>
+<div> 
+            <a href="{% url 'download_reference_f' %}" class="btn btn-primary" style="color:black">Download Faculty</a>
+            <a href="{% url 'download_reference_s' %}" class="btn btn-primary" style="color:black">Download Student</a>
+</div>
+<!--Upload CSV-->
+<div class="card shadow p-4 mt-4">
+    <h1 class="text-center mb-4">Upload Student and Faculty CSV Files</h1>
+    
+            {% if messages %}
+            <ul class="list-group mb-3">
+                {% for message in messages %}
+                <li class="list-group-item list-group-item-warning">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <form action="{% url 'upload_csv' %}" method="POST" enctype="multipart/form-data" style="background-color: #2e302f;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="stuFile" class="form-label">  Student CSV file :  </label>
+                            <input type="file" class="form-control" id="stuFile" name="student_file" accept=".csv" required>
+                            <br>
+                            <label for="facFile" class="form-label">  Faculty CSV file :  </label>
+                            <input type="file" class="form-control" id="facFile" name="faculty_file" accept=".csv" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Upload</button>
+                    </form>
+                </div>
+{% endblock %}
