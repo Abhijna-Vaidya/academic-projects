@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        #tableContainer{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        table {
+            border-collapse: collapse;
+            width: 85%;
+            margin-top: 20px;
+        }
+        th, td {
+            /* border: 1px solid #dddddd; */
+            text-align: left;
+            border: 2px solid black;
+            padding: 8px;
+            background-color: rgb(170, 199, 241);
+            /* color: white; */
+        }
+        th {             
+            background-color: #f2f2f2;
+            background-color: rgb(51, 95, 161);
+            color: white;
+            border: 2px solid black;
+        }
+        #showButton{
+            margin-top: 20px; /* Adjust margin-top as needed */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: rgb(51, 95, 161);
+            color: white;
+            border: 2px solid black;
+
+        }
+        #buttonContainer {
+            background-color: rgb(51, 95, 161);
+            border: 2px solid black;
+            margin-top: 10px;
+            text-align: center;
+            color: white;
+            font-size:  22px;
+            height: 54px;
+            width: 175px;
+            text-decoration: none;
+         } 
+         body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        h3{
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <h3 class="navbar-brand" style="font-size: 25px;">Welcome!</h3>
+        </div>
+      </nav>
+<button id="showButton" onclick="download()"><h2>Show info of database not updated</h2></button>
+<div class="output">
+    
+</div>
+<!-- Container for the table -->
+<div id="tableContainer"></div>
+<script>
+document.getElementById('showButton').addEventListener('click', function() {
+    // Make an AJAX request to fetch data from the backend
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "index.php?query=Select USN,name from student left join final_result using (USN) where final_result.USN is NULL", true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                // Data received successfully
+                var tableContainer = document.getElementById('tableContainer');
+                tableContainer.innerHTML = xhr.responseText;
+            } else {
+                // Handle errors
+                console.error('Failed to fetch data');
+            }
+        }
+    };
+    xhr.send();
+});
+
+ function download() {
+        var tableHeight = document.querySelector('#tableContainer').offsetHeight;
+        var button = document.querySelector('#buttonContainer');
+        button.style.top = tableHeight + 'px';
+        buttonContainer.style.display = 'block';
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
