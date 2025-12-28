@@ -1,0 +1,135 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Student Dashboard
+{% endblock  %}
+
+
+{% block javaScript %}
+<script>
+    const unregisterExistingSWs = async () => {
+        if ('serviceWorker' in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          for (let registration of registrations) {
+            await registration.unregister();
+            console.log('Existing service worker unregistered.');
+          }
+        }
+      };
+
+  const registersw= async () =>{
+    const registration= await navigator.serviceWorker.register('/static/firebase-messaging-sw.js')
+    return registration
+  }
+
+  const requestNotificationPermission= async() =>{
+    const permission=await Notification.requestPermission();
+    if(permission!=='granted'){
+      console.log('Permission not granted')
+    }
+  }
+  const main= async() =>{
+    await requestNotificationPermission()
+    await unregisterExistingSWs();
+    await registersw()
+  }
+  main()
+</script>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="text-center">Student Dashboard</h2>
+    <h2 class="mb-4"  style="font-weight: bold;">Welcome, {{ student_name }}</h2>
+</div>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Batch Number</th>
+                    <th>Guide Name</th>
+                    <th>Submissions</th>
+                    <th>Report Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for group in groups %}
+                <tr>
+                    <td class="styled-td">{{ group.batch_number }}</td>
+                    <td class="styled-td">{% if group.guide %}
+                          {{ group.guide.name }}
+                        {% else %}
+                          Not Assigned
+                        {% endif %}</td>
+                    <td class="styled-td">
+                        {% if group.project_review1_ppt and group.project_report %}
+                            <p style="color: rgb(18, 36, 18);"><i class="bi bi-check-circle-fill"></i> PPT
+                            <p style="color: rgb(18, 36, 18);"><i class="bi bi-check-circle-fill"></i> Report
+                        {% elif group.project_review1_ppt %}
+                            <p style="color: rgb(18, 36, 18);"><i class="bi bi-check-circle-fill"></i> PPT 
+                            <p style="color: red;"><i class="bi bi-x-circle-fill"></i> Report
+                        {% elif group.project_report %}
+                            <p style="color: rgb(18, 36, 18);"><i class="bi bi-check-circle-fill"></i> Report 
+                            <p style="color: red;"><i class="bi bi-x-circle-fill"></i> PPT
+                        {% else %}
+                        Not Submitted
+                        {% endif %}
+                    </td>
+                    <td>
+    {% if group.review_done %}
+        <span class="badge bg-success">
+            <i class="fas fa-thumbs-up"></i> Reviewed
+        </span>
+    {% else %}
+        <span class="badge bg-warning">
+            <i class="fas fa-thumbs-down"></i> Not Reviewed
+        </span>
+    {% endif %}
+</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+   <div class="container text-center mt-5">
+        <div class="d-flex flex-column align-items-center gap-3">
+          <a href="{% url 'create_group' %}" class="btn btn-primary btn-lg w-50">
+            <i class="fas fa-users"></i> <span>Create Group</span>
+        </a>
+        <a href="{% url 'upload_project' %}" class="btn btn-secondary btn-lg w-50">
+            <i class="fas fa-upload"></i> <span>Upload Project</span>
+        </a>
+        <a href="{% url 'view_doc' %}" class="btn btn-success btn-lg w-50">
+            <i class="fas fa-file-alt"></i> <span>View Documents</span>
+        </a>
+        </div>
+    </div>
+{% endblock  %}
+{% block notifications %}
+<a href="{% url 'notifications'%}" class="btn btn-light me-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
+    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
+  </svg>
+</a>
+{% endblock %}
+
+
+
+
+{% block change_password %}
+    <a class="btn btn-info me-2" href="{% url 'change_password' %}">Change Password</a>
+{% endblock %}
+
+{% block logout %}
+
+            <form action="{%url 'student_logout' %}" method="post">
+              {% csrf_token %}
+              <button class="btn btn-danger" type="submit"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </form>
+
+{% endblock %}
